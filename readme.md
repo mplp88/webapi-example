@@ -1,0 +1,1 @@
+Un simple ejemplo de WebApi en .Net Core con un HTML para probar y demostrar el uso de fetch
