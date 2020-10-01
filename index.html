@@ -1,0 +1,92 @@
+<ul id="lista">
+</ul>
+<button onclick="testPost()">Test Get</button>
+<button onclick="testPost()">Test GetById por query</button>
+<button onclick="testPost()">Test GetById por route</button>
+<button onclick="testPost()">Test Post</button>
+<script>
+  /*
+Sintaxis básica del fetch:
+fetch(url, [options]);
+Si no se especifican las opciones asume que es un get.
+para hacer otra cosa que no sea un get (POST, PUT, PATCH o DELETE).
+aclarar el method en las opciones.
+
+en este caso:
+metodo POST para probar, especificar mode: 'cors' para decir que viene desde otro dominio,
+body convertido a string con los atributos necesarios para el objeto y el header con el
+Content-Type diciendo que está enviando un JSON.
+
+El fetch devuelve una promesa que cuando se concluye devuelve un response.
+
+Se le concatena el .then() para saber que hacer después. Como yo sé que devuelve un JSON
+la función dentro del .then() retorna el json (response.json()) que también devuelve una promesa,
+por lo tanto se le puede concatenar otro .then().
+
+En el siguiente .then() ya tengo el JSON parseado convertido a objecto de JS y opero sobre él.
+Como es un array itero todo los objetos y los pongo en un <li></li> para meterlo en el HTML de ejemplo.
+
+*/
+  function testGet() {
+    fetch('https://localhost:5001/WeatherForecast/Get')
+      .then(response => response.json())
+      .then(json => {
+        imprimirRespuesta(json);
+      })
+      .catch(err => console.error(err));
+  }
+
+  function testGetByIdQuery() {
+    fetch('https://localhost:5001/WeatherForecast/Get?id=1')
+      .then(response => response.json())
+      .then(json => {
+        imprimirRespuesta(json);
+      })
+      .catch(err => console.error(err))
+  }
+
+  function testGetByIdRoute() {
+    fetch('https://localhost:5001/WeatherForecast/Get/1')
+      .then(response => response.json())
+      .then(json => {
+        imprimirRespuesta(json);
+      })
+      .catch(err => console.error(err))
+  }
+
+  function testPost() {
+    fetch('https://localhost:5001/WeatherForecast/Post', {
+        method: 'POST',
+        mode: 'cors',
+        body: JSON.stringify({
+          Name: 'Buenos Aires'
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      .then(response => response.json())
+      .then(json => {
+        imprimirRespuesta(json);
+      })
+      .catch(err => console.error(err))
+  }
+
+  function imprimirRespuesta(array) {
+    console.log(array);
+    let lista = document.getElementById('lista');
+    lista.innerHTML = '';
+
+    array.forEach(objeto => {
+      let fecha = new Date(objeto.date)
+      let dia = fecha.getDate();
+      let mes = fecha.getMonth() + 1;
+
+      let li = document.createElement('li');
+      li.innerText = `Ciudad: ${objeto.city}
+        Fecha: ${dia}/${mes},
+        Temperatura: ${objeto.temperatureC}`
+      lista.appendChild(li)
+    })
+  }
+</script>
