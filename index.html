@@ -1,8 +1,8 @@
 <ul id="lista">
 </ul>
-<button onclick="testPost()">Test Get</button>
-<button onclick="testPost()">Test GetById por query</button>
-<button onclick="testPost()">Test GetById por route</button>
+<button onclick="testGet()">Test Get</button>
+<button onclick="testGetByIdQuery()">Test GetById por query</button>
+<button onclick="testGetByIdRoute()">Test GetById por route</button>
 <button onclick="testPost()">Test Post</button>
 <script>
   /*
@@ -33,25 +33,34 @@ Como es un array itero todo los objetos y los pongo en un <li></li> para meterlo
       .then(json => {
         imprimirRespuesta(json);
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+        alert('error');
+        console.error(err)
+      });
   }
 
   function testGetByIdQuery() {
-    fetch('https://localhost:5001/WeatherForecast/Get?id=1')
+    fetch('https://localhost:5001/WeatherForecast/GetById?id=1')
       .then(response => response.json())
       .then(json => {
         imprimirRespuesta(json);
       })
-      .catch(err => console.error(err))
+      .catch(err => {
+        alert('error');
+        console.error(err)
+      });
   }
 
   function testGetByIdRoute() {
-    fetch('https://localhost:5001/WeatherForecast/Get/1')
+    fetch('https://localhost:5001/WeatherForecast/GetById/1')
       .then(response => response.json())
       .then(json => {
         imprimirRespuesta(json);
       })
-      .catch(err => console.error(err))
+      .catch(err => {
+        alert('error');
+        console.error(err)
+      });
   }
 
   function testPost() {
@@ -69,7 +78,10 @@ Como es un array itero todo los objetos y los pongo en un <li></li> para meterlo
       .then(json => {
         imprimirRespuesta(json);
       })
-      .catch(err => console.error(err))
+      .catch(err => {
+        alert('error');
+        console.error(err)
+      });
   }
 
   function imprimirRespuesta(array) {
@@ -83,7 +95,7 @@ Como es un array itero todo los objetos y los pongo en un <li></li> para meterlo
       let mes = fecha.getMonth() + 1;
 
       let li = document.createElement('li');
-      li.innerText = `Ciudad: ${objeto.city}
+      li.innerText = `Ciudad: ${objeto.city != undefined ? objeto.city : 'Ciudad no definida'}
         Fecha: ${dia}/${mes},
         Temperatura: ${objeto.temperatureC}`
       lista.appendChild(li)

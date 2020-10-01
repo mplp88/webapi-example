@@ -38,7 +38,7 @@ namespace webapi_test.Controllers
     }
 
     [HttpGet]
-    [Route("Get")]
+    [Route("GetById")]
     public IEnumerable<WeatherForecast> GetById([FromQuery] int id)
     {
       var rng = new Random();
@@ -53,7 +53,7 @@ namespace webapi_test.Controllers
     }
 
     [HttpGet]
-    [Route("Get/{id}")]
+    [Route("GetById/{id}")]
     public IEnumerable<WeatherForecast> GetByIdSecondary([FromRoute] int id)
     {
       var rng = new Random();
