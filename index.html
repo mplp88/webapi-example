@@ -1,11 +1,44 @@
-<ul id="lista">
-</ul>
-<button onclick="testGet()">Test Get</button>
-<button onclick="testGetByIdQuery()">Test GetById por query</button>
-<button onclick="testGetByIdRoute()">Test GetById por route</button>
-<button onclick="testPost()">Test Post</button>
-<script>
-  /*
+<html>
+
+<head>
+  <title>WebApi Test</title>
+</head>
+
+<body>
+
+
+  <ul id="lista">
+  </ul>
+  <h2>WeatherForecast Api</h2>
+  <button onclick="testGet()">WeatherForecast Get</button>
+  <button onclick="testGetByIdQuery()">WeatherForecast GetById por query</button>
+  <button onclick="testGetByIdRoute()">WeatherForecast GetById por route</button>
+  <button onclick="testPost()">WeatherForecast Post</button>
+  <h2>Usuarios Api</h2>
+  <ul id="usuarios">
+  </ul>
+  <form id="Formulario" onsubmit="return false">
+    <label for="Id">Id</label>
+    <input id="Id" name="Id" disabled />
+    <br>
+    <label for="Username">Username</label>
+    <input id="Username" name="Username" />
+    <br>
+    <label for="Password">Password</label>
+    <input id="Password" name="Password" type="password" />
+    <button type="button" id="mostrar-password" onclick="mostrarPassword()">Mostrar password</button>
+    <button type="button" id="ocultar-password" onclick="ocultarPassword()" style="display: none;">Ocultar
+      password</button>
+    <br>
+    <button type="reset">Limpiar</button>
+  </form>
+  <button onclick="addUsuario()">Agregar usuario</button>
+  <button onclick="getUsuarios()">Todos los usuarios</button>
+  <button onclick="getUsuarioById()">Usuario GetById</button>
+  <button onclick="updateUsuario()">Usuario Update</button>
+  <button onclick="deleteUsuario()">Usuario Delete</button>
+  <script>
+    /*
 Sintaxis básica del fetch:
 fetch(url, [options]);
 Si no se especifican las opciones asume que es un get.
@@ -27,78 +60,240 @@ En el siguiente .then() ya tengo el JSON parseado convertido a objecto de JS y o
 Como es un array itero todo los objetos y los pongo en un <li></li> para meterlo en el HTML de ejemplo.
 
 */
-  function testGet() {
-    fetch('https://localhost:5001/WeatherForecast/Get')
-      .then(response => response.json())
-      .then(json => {
-        imprimirRespuesta(json);
-      })
-      .catch(err => {
-        alert('error');
-        console.error(err)
-      });
-  }
+    function testGet() {
+      fetch('https://localhost:5001/WeatherForecast/Get')
+        .then(response => response.json())
+        .then(json => {
+          imprimirRespuesta(json);
+        })
+        .catch(err => {
+          alert('error');
+          console.error(err)
+        });
+    }
 
-  function testGetByIdQuery() {
-    fetch('https://localhost:5001/WeatherForecast/GetById?id=1')
-      .then(response => response.json())
-      .then(json => {
-        imprimirRespuesta(json);
-      })
-      .catch(err => {
-        alert('error');
-        console.error(err)
-      });
-  }
+    function testGetByIdQuery() {
+      fetch('https://localhost:5001/WeatherForecast/GetById?id=1')
+        .then(response => response.json())
+        .then(json => {
+          imprimirRespuesta(json);
+        })
+        .catch(err => {
+          alert('error');
+          console.error(err)
+        });
+    }
 
-  function testGetByIdRoute() {
-    fetch('https://localhost:5001/WeatherForecast/GetById/1')
-      .then(response => response.json())
-      .then(json => {
-        imprimirRespuesta(json);
-      })
-      .catch(err => {
-        alert('error');
-        console.error(err)
-      });
-  }
+    function testGetByIdRoute() {
+      fetch('https://localhost:5001/WeatherForecast/GetById/1')
+        .then(response => response.json())
+        .then(json => {
+          imprimirRespuesta(json);
+        })
+        .catch(err => {
+          alert('error');
+          console.error(err)
+        });
+    }
 
-  function testPost() {
-    fetch('https://localhost:5001/WeatherForecast/Post', {
-        method: 'POST',
-        mode: 'cors',
-        body: JSON.stringify({
-          Name: 'Buenos Aires'
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      .then(response => response.json())
-      .then(json => {
-        imprimirRespuesta(json);
-      })
-      .catch(err => {
-        alert('error');
-        console.error(err)
-      });
-  }
+    function testPost() {
+      fetch('https://localhost:5001/WeatherForecast/Post', {
+          method: 'POST',
+          mode: 'cors',
+          body: JSON.stringify({
+            Name: 'Buenos Aires'
+          }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(response => response.json())
+        .then(json => {
+          imprimirRespuesta(json);
+        })
+        .catch(err => {
+          alert('error');
+          console.error(err)
+        });
+    }
 
-  function imprimirRespuesta(array) {
-    console.log(array);
-    let lista = document.getElementById('lista');
-    lista.innerHTML = '';
+    function imprimirRespuesta(array) {
+      console.log(array);
+      let lista = document.getElementById('lista');
+      lista.innerHTML = '';
 
-    array.forEach(objeto => {
-      let fecha = new Date(objeto.date)
-      let dia = fecha.getDate();
-      let mes = fecha.getMonth() + 1;
+      array.forEach(objeto => {
+        let fecha = new Date(objeto.date)
+        let dia = fecha.getDate();
+        let mes = fecha.getMonth() + 1;
 
-      let li = document.createElement('li');
-      li.innerText = `Ciudad: ${objeto.city != undefined ? objeto.city : 'Ciudad no definida'}
+        let li = document.createElement('li');
+        li.innerText = `Ciudad: ${objeto.city != undefined ? objeto.city : 'Ciudad no definida'}
         Fecha: ${dia}/${mes},
-        Temperatura: ${objeto.temperatureC}`
-      lista.appendChild(li)
-    })
-  }
-</script>
+        Temperatura Celsius: ${objeto.temperatureC}° C,
+        Temperatura Farenheit: ${objeto.temperatureF}° F`
+        lista.appendChild(li)
+      })
+    }
+
+    function addUsuario() {
+      let username = document.querySelector('#Username').value;
+      let password = document.querySelector('#Password').value;
+
+      if (document.querySelector('#Id').value != "") {
+        alert('Limpie el formulario primero');
+        return;
+      }
+
+      if (!username || !password) {
+        alert('Todos los campos son requeridos');
+        return;
+      }
+
+      document.querySelector('#Formulario').reset();
+
+      fetch('https://localhost:5001/', {
+          method: 'POST',
+          mode: 'cors',
+          body: JSON.stringify({
+            username,
+            password
+          }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(response => response.json())
+        .then(json => {
+          console.log(json);
+          getUsuarios();
+        })
+        .catch(err => {
+          alert('error');
+          console.error(err)
+        });
+    }
+
+    function getUsuarios() {
+      fetch('https://localhost:5001/')
+        .then(response => response.json())
+        .then(json => {
+          imprimirUsuarios(json);
+        })
+        .catch(err => {
+          alert('error');
+          console.error(err)
+        });
+    }
+
+    function getUsuarioById() {
+      let id = prompt('Ingrese el Id: ');
+
+      fetch(`https://localhost:5001/${id}`)
+        .then(response => response.json())
+        .then(json => {
+          completarUsuario(json);
+        })
+        .catch(err => {
+          alert('error');
+          console.error(err)
+        });
+    }
+
+    function updateUsuario() {
+      let id = document.querySelector('#Id').value;
+
+      if (id == '') {
+        alert('Debe seleccionar un usuario por Id (GetById)')
+        return;
+      }
+
+      let username = document.querySelector('#Username').value;
+      let password = document.querySelector('#Password').value;
+      document.querySelector('#Formulario').reset();
+
+      fetch(`https://localhost:5001/${id}`, {
+          method: 'PUT',
+          mode: 'cors',
+          body: JSON.stringify({
+            username,
+            password
+          }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(response => response.json())
+        .then(json => {
+          console.log(json);
+          getUsuarios();
+        })
+        .catch(err => {
+          alert('error');
+          console.error(err)
+        });
+    }
+
+    function deleteUsuario() {
+      let id = prompt('Ingrese el Id para eliminar: ');
+
+      fetch(`https://localhost:5001/${id}`, {
+          method: 'DELETE',
+          mode: 'cors'
+        })
+        .then(response => response.json())
+        .then(json => {
+          console.log(json);
+          if (!json) {
+            //en este caso el json devuelve true o false, por eso puedo hacer esto
+            alert('Error eliminando el registro');
+          }
+          getUsuarios();
+        })
+        .catch(err => {
+          alert('error');
+          console.error(err)
+        });
+    }
+
+    function imprimirUsuarios(array) {
+      console.log(array);
+      let lista = document.getElementById('usuarios');
+      lista.innerHTML = '';
+
+      if (!array.length) {
+        let li = document.createElement('li');
+        li.innerText = `Sin usuarios para mostrar`;
+        lista.appendChild(li);
+        return;
+      }
+      array.forEach(objeto => {
+        let li = document.createElement('li');
+        li.id = objeto.id;
+        li.innerText = `Id: ${objeto.id} - Username: ${objeto.username}`;
+        lista.appendChild(li)
+      })
+    }
+
+    function mostrarPassword() {
+      document.querySelector('#Password').type = 'text';
+      document.querySelector('#mostrar-password').style.display = 'none';
+      document.querySelector('#ocultar-password').style.display = 'inline';
+    }
+
+    function ocultarPassword() {
+      document.querySelector('#Password').type = 'password';
+      document.querySelector('#mostrar-password').style.display = 'inline';
+      document.querySelector('#ocultar-password').style.display = 'none';
+    }
+
+    function completarUsuario(usuario) {
+      document.querySelector('#Id').value = usuario.id;
+      document.querySelector('#Username').value = usuario.username;
+      document.querySelector('#Password').value = usuario.password;
+
+    }
+  </script>
+</body>
+
+</html>
